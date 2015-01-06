@@ -7,8 +7,8 @@
 
 const char* IpAddressTranslator::LOOKUP_FUNCTION = "lookup_ip";
 
-IpAddressTranslator::IpAddressTranslator(const char* modulePath, IpAddress snmpServer, const char* snmpCommunity) :
-	TranslatorSnmp(modulePath, snmpServer, snmpCommunity)
+IpAddressTranslator::IpAddressTranslator(const char* modulePath, const char* confPath) :
+	Translator(modulePath, confPath)
 {
 	this->lookupIp = (lookup_ip_t*)dlsym(this->moduleHandle,
 			IpAddressTranslator::LOOKUP_FUNCTION);

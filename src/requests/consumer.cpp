@@ -15,8 +15,8 @@
 #include "../translators/macaddress.h"
 
 Consumer::Consumer() :
-	ipTranslator("lib/libip-mac_snmp.so", IpAddress("192.168.104.1"), "public"),
-	macTranslator("lib/libmac-port_snmp.so", IpAddress("192.168.104.2"), "public")
+	ipTranslator("lib/libip-mac_snmp.so", "etc/ip-mac"),
+	macTranslator("lib/libmac-port_snmp.so", "etc/mac-port")
 {	
 	this->runner = thread(&Consumer::run, this);
 }

@@ -1,7 +1,7 @@
 #ifndef NX_TRANSLATOR_MACADDRESS_H
 #define NX_TRANSLATOR_MACADDRESS_H
 
-#include "translatorsnmp.h"
+#include "translator.h"
 
 #include "../primitives/macaddr.h"
 #include "../primitives/ipaddr.h"
@@ -10,9 +10,9 @@
 
 typedef long int lookup_mac_t(macaddr_t mac);
 
-class MacAddressTranslator : TranslatorSnmp {
+class MacAddressTranslator : public Translator {
 	public:
-		MacAddressTranslator(const char* modulePath, IpAddress snmpServer, const char* snmpCommunity);
+		MacAddressTranslator(const char* modulePath, const char* confPath);
 
 		long int translate(MacAddress mac);
 

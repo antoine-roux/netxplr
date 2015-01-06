@@ -1,17 +1,43 @@
 #include "main.h"
 
 #include <string.h>
+#include <string>
+#include <fstream>
 
 #include "../common/snmp.h"
 #include "../common/primitives/macaddr.h"
 #include "../common/primitives/ipaddr.h"
 
-using namespace std;
-
 void append_oid_mac(macaddr_t mac, oid* oid_out, size_t* oid_len) {
 	for (unsigned char byte : mac.address) {
 		oid_out[(*oid_len)++] = byte;
 	}
+}
+
+void read_conf(const char* file) {
+	ifstream conf(file);
+
+	string line;
+	while (conf >> line) {
+		if (! line.length()) continue;
+
+		if (line[0] == '#') continue;
+		if (line[0] == ';') continue;
+
+		int posEqual = line.find('=');
+		string name, value;
+		name  = line.substr(0, posEqual);
+		value = line.substr(posEqual + 1);
+
+		confMap[name] = value;
+	}
+
+	string snmp_server, snmp_community;
+	snmp_server = confMap["server"];
+	snmp_community = confMap["community"];
+
+	SNMP& snmpSession = SNMP::getInstance();
+	snmpSession.init(snmp_server.c_str(), snmp_community.c_str());
 }
 
 extern "C" {
@@ -21,9 +47,8 @@ extern "C" {
 	void unload() {
 	}
 
-	void snmp_initialize(ipaddr_t snmp_server, const char* snmp_community) {
-		SNMP& snmpSession = SNMP::getInstance();
-		snmpSession.init(ipaddr_cstr(snmp_server), snmp_community);
+	void initialize(const char* conf_file) {
+		read_conf(conf_file);
 		initialized = true;
 	}
 	

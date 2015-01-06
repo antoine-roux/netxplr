@@ -6,8 +6,8 @@
 
 const char* MacAddressTranslator::LOOKUP_FUNCTION = "lookup_mac";
 
-MacAddressTranslator::MacAddressTranslator(const char* modulePath, IpAddress snmpServer, const char* snmpCommunity) :
-	TranslatorSnmp(modulePath, snmpServer, snmpCommunity)
+MacAddressTranslator::MacAddressTranslator(const char* modulePath, const char* confPath) :
+	Translator(modulePath, confPath)
 {
 	this->_lookupMac = (lookup_mac_t*)dlsym(this->moduleHandle,
 			MacAddressTranslator::LOOKUP_FUNCTION);
